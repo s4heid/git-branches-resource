@@ -65,7 +65,25 @@ it_can_check_with_added_and_removed_branches() {
   '
 }
 
+it_can_check_with_filter() {
+  local repo=$(init_repo)
+  local filter="^matching-branch-[ab]$"
+
+  make_commit_to_branch $repo matching-branch-a
+  make_commit_to_branch $repo matching-branch-b
+  make_commit_to_branch $repo not-matching-branch-a
+
+  check_uri_with_filter_from $repo $filter $'matching-branch-a' | jq -e '
+    . == [{
+      branches: "matching-branch-a\nmatching-branch-b",
+      added: "matching-branch-b",
+      removed: ""
+    }]
+  '
+}
+
 run it_can_check_from_no_version
 run it_can_check_with_added_branch
 run it_can_check_with_removed_branch
 run it_can_check_with_added_and_removed_branches
+run it_can_check_with_filter

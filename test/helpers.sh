@@ -85,6 +85,18 @@ check_uri_from() {
   }' --arg uri "$1" --arg branches "$2" | ${resource_dir}/check | tee /dev/stderr
 }
 
+check_uri_with_filter_from() {
+  jq -n '{
+    source: {
+      uri: $uri,
+      filter: $filter
+    },
+    version: {
+      branches: $branches
+    }
+  }' --arg uri "$1" --arg filter "$2" --arg branches "$3" | ${resource_dir}/check | tee /dev/stderr
+}
+
 get_branches_added_removed() {
   jq -n '{
     version: {

@@ -17,13 +17,14 @@ configure_git_ssl_verification $payload
 configure_credentials $payload
 
 uri=$(jq -r '.source.uri // ""' < $payload)
+filter=$(jq -r '.source.filter // ""' < $payload)
 git_config_payload=$(jq -r '.source.git_config // []' < $payload)
 
 previous_branches="$(jq -r '.version.branches // ""' < $payload)"
 
 configure_git_global "${git_config_payload}"
 
-current_branches="$(git ls-remote -h "$uri" | awk '{print $NF}' | sed 's/refs\/heads\///' | sort)"
+current_branches="$(git ls-remote -h "$uri" | awk '{print $NF}' | sed 's/refs\/heads\///' | grep -E "${filter}" | sort)"
 
 set_sub() {
   jq -nr '($a | split("\n")) - ($b | split("\n")) | join("\n")' \
