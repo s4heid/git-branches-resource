@@ -39,6 +39,9 @@ resource_types:
 * `skip_ssl_verification`: *Optional.* Skips git ssl verification by exporting
   `GIT_SSL_NO_VERIFY=true`.
 
+* `filter`: *Optional.* Filter branches according to a regex
+  pattern. The regex flavour conforms to the [POSIX extended regular expressions](https://en.wikipedia.org/wiki/Regular_expression#POSIX_basic_and_extended), which is used by `grep -E` and `egrep`.
+
 * `git_config`: *Optional*. If specified as (list of pairs `name` and `value`)
   it will configure git global options, setting each name with each value.
 
